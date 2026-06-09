@@ -17,3 +17,8 @@ Practice Project to work on data engineering skillset
 ## Day 2
 - Added function for generating accounts since people have transactions across different accounts
 - Created a Jupyter notebook for data exploration purposes
+
+## Day 3
+- Added function for generating random transactions of differing amounts and categories
+- Transaction values are using exponential function
+- Saved raw data and starting to prepare the results for analytics

@@ -1,10 +1,12 @@
 from faker import Faker
 import pandas as pd
 import random
+import numpy as np
 
 fake = Faker()
 
 random.seed(42)
+np.random.seed(42)
 
 """
 Generate synthetic credit-card customer data for
@@ -15,12 +17,13 @@ AWS Data Lake project.
 def main():
     customer_df = generate_customers(10000)
     accounts_df = generate_accounts(customer_df)
-    customer_df.to_csv("data/customers.csv", index=False)
-    accounts_df.to_csv("data/accounts.csv", index=False)
+    transactions_df = generate_transactions(accounts_df)
+    customer_df.to_csv("data/raw/customers.csv", index=False)
+    accounts_df.to_csv("data/raw/accounts.csv", index=False)
+    transactions_df.to_csv("data/raw/transactions.csv", index=False)
     print(f"Generated {len(customer_df):,} customers")
     print(f"Generated {len(accounts_df):,} accounts")
-    print(accounts_df.head())
-    print("Missing customer IDs:", accounts_df["customer_id"].isnull().sum())
+    print(f"Generated {len(transactions_df):,} transactions")
 
 
 def generate_customers(num_customers=1000):
@@ -72,6 +75,39 @@ def generate_accounts(customer_df):
             account_id += 1
 
     return pd.DataFrame(accounts)
+
+
+def generate_transactions(accounts_df):
+    transactions = []
+    transaction_id = 1
+    merchant_categories = [
+        "Grocery",
+        "Dining",
+        "Gas",
+        "Retail",
+        "Travel",
+        "Utilities",
+        "Entertainment",
+    ]
+
+    for _, account in accounts_df.iterrows():
+        num_transactions = random.randint(20, 80)
+
+        for _ in range(num_transactions):
+            transactions.append(
+                {
+                    "transaction_id": transaction_id,
+                    "account_id": account["account_id"],
+                    "transaction_date": fake.date_between(
+                        start_date="-2y", end_date="today"
+                    ),
+                    "amount": round(np.random.exponential(75), 2),
+                    "merchandise_category": random.choice(merchant_categories),
+                }
+            )
+            transaction_id += 1
+
+    return pd.DataFrame(transactions)
 
 
 if __name__ == "__main__":
