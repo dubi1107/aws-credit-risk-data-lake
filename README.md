@@ -13,3 +13,7 @@ Practice Project to work on data engineering skillset
     - Used Faker to generate the data
     - Function has ability to vary the number of entries
 - Created 1000 fake customer records
+
+## Day 2
+- Added function for generating accounts since people have transactions across different accounts
+- Created a Jupyter notebook for data exploration purposes

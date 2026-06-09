@@ -14,9 +14,13 @@ AWS Data Lake project.
 
 def main():
     customer_df = generate_customers(10000)
-    print(customer_df.head())
-    customer_df.to_csv("data/customer.csv", index=False)
-    print(f"Generated {len(customer_df)} customers.")
+    accounts_df = generate_accounts(customer_df)
+    customer_df.to_csv("data/customers.csv", index=False)
+    accounts_df.to_csv("data/accounts.csv", index=False)
+    print(f"Generated {len(customer_df):,} customers")
+    print(f"Generated {len(accounts_df):,} accounts")
+    print(accounts_df.head())
+    print("Missing customer IDs:", accounts_df["customer_id"].isnull().sum())
 
 
 def generate_customers(num_customers=1000):
@@ -38,6 +42,36 @@ def generate_customers(num_customers=1000):
         )
 
     return pd.DataFrame(customers)
+
+
+def generate_accounts(customer_df):
+    accounts = []
+    account_id = 10000
+
+    for customer_id in customer_df["customer_id"]:
+        num_accounts = random.randint(1, 3)
+        for _ in range(num_accounts):
+            credit_limit = random.choice([2000, 5000, 10000, 15000, 20000, 30000])
+            current_balance = round(random.uniform(0, credit_limit * 0.95), 2)
+            accounts.append(
+                {
+                    "account_id": account_id,
+                    "customer_id": customer_id,
+                    "credit_limit": credit_limit,
+                    "current_balance": current_balance,
+                    "account_status": random.choice(
+                        [
+                            "Active",
+                            "Active",
+                            "Active",
+                            "Closed",
+                        ]
+                    ),
+                }
+            )
+            account_id += 1
+
+    return pd.DataFrame(accounts)
 
 
 if __name__ == "__main__":
