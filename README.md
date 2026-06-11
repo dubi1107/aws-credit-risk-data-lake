@@ -22,3 +22,8 @@ Practice Project to work on data engineering skillset
 - Added function for generating random transactions of differing amounts and categories
 - Transaction values are using exponential function
 - Saved raw data and starting to prepare the results for analytics
+
+## Day 4
+- Established practice S3 bucket in AWS to upload the parquet file to
+- Spun up Athena to query the parquet and save the output in S3 bucket
+- Ran several queries in Athena on the parquet that was uploaded
